@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gemini Chatbot</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f0f0f0; }
+        .chat-container { max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; height: 100vh; display: flex; flex-direction: column; }
+        .chat-history { flex: 1; overflow-y: auto; margin-bottom: 20px; }
+        .message { margin: 10px; padding: 10px; border-radius: 5px; max-width: 80%; }
+        .user-message { background-color: #dcf8c6; align-self: flex-end; }
+        .bot-message { background-color: #ececec; align-self: flex-start; }
+        .input-container { display: flex; }
+        input[type="text"] { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        input[type="submit"] { padding: 10px 20px; margin-left: 10px; border: none; background-color: #28a745; color: #fff; border-radius: 5px; }
+        .chat-history::-webkit-scrollbar { width: 8px; }
+        .chat-history::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-history">
+            {% for message in chat_history %}
+                {% if message.role == 'user' %}
+                    <div class="message user-message">
+                        <strong>You:</strong> {{ message.content }}
+                    </div>
+                {% else %}
+                    <div class="message bot-message">
+                        <strong>Bot:</strong> {{ message.content }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <form method="post" class="input-container">
+            <input type="text" name="user_input" placeholder="Type your message here..." required autofocus>
+            <input type="hidden" name="chat_history" value='{{ chat_history_json | tojson | safe }}'>
+            <input type="submit" value="Send">
+        </form>
+    </div>
+</body>
+</html>
